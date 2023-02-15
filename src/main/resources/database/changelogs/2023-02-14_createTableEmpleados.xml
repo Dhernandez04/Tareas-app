@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+     <changeSet id="2023021406" author="dhernandez">
+        <createTable tableName="empleados">
+            <column name="id" type="serial" remarks="Identificador autoincremental">
+               <constraints primaryKey="true"/>
+            </column>
+            <column name="numero_documento" type="varchar(20)" remarks="Numero de documento">
+               <constraints nullable="false"/>
+            </column>
+            <column name="nombres" type="varchar(100)" remarks="Nombres del empleado">
+               <constraints nullable="false"/>
+            </column>
+            <column name="apellidos" type="varchar(100)" remarks="Apellidos del empleado">
+               <constraints nullable="false"/>
+            </column>
+            <column name="fecha_registro" type="date" remarks="Fecha en la cual se creo el registro">
+               <constraints nullable="false"/>
+            </column>
+            <column name="fecha_actualizacion" type="date" remarks="Fecha en la cual se actualizo el registro">
+               <constraints nullable="true"/>
+            </column>
+            <column name="id_usuario" type="int" remarks="Campo referencial del del usuario">
+               <constraints nullable="false"/>
+            </column>
+            
+        </createTable>
+          <rollback>
+          <dropTable tableName="empleados"/>  
+        </rollback>
+     </changeSet>
+     
+     <changeSet author="dhernandez" id="2023021407">
+        <addForeignKeyConstraint baseColumnNames="id_usuario"
+            baseTableName="empleados"
+            constraintName="fk_id_usuario"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+            referencedColumnNames="id"
+            referencedTableName="usuarios"/>
+           
+            <rollback>
+             <dropForeignKeyConstraint baseTableName="empleados" constraintName="fk_id_usuario"/>
+            </rollback>
+     </changeSet>
+     
+     
+</databaseChangeLog>

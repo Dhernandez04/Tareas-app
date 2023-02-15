@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+     <changeSet id="2023021408" author="dhernandez">
+        <createTable tableName="tareas">
+            <column name="id" type="serial" remarks="Identificador autoincremental">
+               <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre" type="varchar(45)" remarks="Nombre del estado">
+               <constraints nullable="false"/>
+            </column>
+             <column name="descripcion" type="text" remarks="Descripcion de las actividades a realizar">
+               <constraints nullable="false"/>
+            </column>
+            <column name="id_estado" type="varchar(45)" remarks="Identificador referencial del estado de la tarea">
+               <constraints nullable="false"/>
+            </column>
+            <column name="id_supervisor" type="int" remarks="Identificador referencial del supervisor">
+               <constraints nullable="false"/>
+            </column>
+            <column name="id_empleado" type="int" remarks="Identificador referencial del empleado que realiza la actividad">
+               <constraints nullable="false"/>
+            </column>
+            <column name="fecha_registro" type="date" remarks="Fecha de registro">
+               <constraints nullable="false"/>
+            </column>
+             <column name="fecha_actualizacion" type="date" remarks="Fecha de registro">
+               <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <rollback>
+          <dropTable tableName="tareas"/>  
+        </rollback>
+     </changeSet>
+     
+         <changeSet author="dhernandez" id="2023021409">
+        <addForeignKeyConstraint baseColumnNames="id_supervisor"
+            baseTableName="tareas"
+            constraintName="fk_supervisor_id"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE"
+            referencedColumnNames="id"
+            referencedTableName="usuarios"/>
+           
+            <rollback>
+             <dropForeignKeyConstraint baseTableName="tareas" constraintName="fk_supervisor_id"/>
+            </rollback>
+     </changeSet>
+     
+      <changeSet author="dhernandez" id="2023021410">
+        <addForeignKeyConstraint baseColumnNames="id_empleado"
+            baseTableName="tareas"
+            constraintName="fk_empleado_id"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+            referencedColumnNames="id"
+            referencedTableName="empleados"/>
+           
+            <rollback>
+             <dropForeignKeyConstraint baseTableName="tareas" constraintName="fk_empleado_id"/>
+            </rollback>
+     </changeSet>
+</databaseChangeLog>
